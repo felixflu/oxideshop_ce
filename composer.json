@@ -12,7 +12,8 @@
         "phpmailer/phpmailer": "^5.2.14",
         "smarty/smarty": "^2.6.30",
         "oxid-esales/oxideshop-composer-plugin": "dev-master",
-        "oxid-esales/flow-theme": "dev-master"
+        "oxid-esales/flow-theme": "dev-master",
+        "doctrine/dbal": "v2.5.4"
     },
     "require-dev": {
         "oxid-esales/testing-library": "dev-master",
