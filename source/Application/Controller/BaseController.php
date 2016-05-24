@@ -912,8 +912,7 @@ class BaseController extends \oxView
         if ($sortBy &&
             $sortOrder &&
             Registry::getUtils()->isValidAlpha($sortOrder) &&
-            in_array(Str::getStr()->strtolower($sortOrder), $sortDirections) &&
-            in_array($sortBy, oxNew('oxArticle')->getFieldNames())
+            in_array(Str::getStr()->strtolower($sortOrder), $sortDirections)
         ) {
             $sorting = array('sortby' => $sortBy, 'sortdir' => $sortOrder);
         }
