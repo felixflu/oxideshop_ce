@@ -781,8 +781,7 @@ class ShopControl extends \oxSuperCfg
      */
     protected function redirectToMaintenancePageWithoutDbConnection()
     {
-        $headerCode = "HTTP/1.1 302 Found";
-        header($headerCode);
+        header("HTTP/1.1 302 Found");
         header("Location: offline.html");
         header("Connection: close");
         exit();
@@ -795,8 +794,7 @@ class ShopControl extends \oxSuperCfg
      */
     protected static function redirectToSetupWizardWithoutDbConnection()
     {
-        $headerCode = "HTTP/1.1 302 Found";
-        header($headerCode);
+        header("HTTP/1.1 302 Found");
         header("Location: Setup/index.php");
         header("Connection: close");
         exit();
