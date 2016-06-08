@@ -681,10 +681,6 @@ class ShopControl extends \oxSuperCfg
         $message .= $debugInfo->formatTimeStamp();
         $message .= $debugInfo->formatExecutionTime($this->getTotalTime());
 
-        if ($debugLevel == 7) {
-            $message .= $debugInfo->formatDbInfo();
-        }
-
         return $message;
     }
 
