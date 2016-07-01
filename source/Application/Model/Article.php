@@ -3871,7 +3871,7 @@ class Article extends \oxI18n implements ArticleInterface, \oxIUrl
             if ($oRs != false && $oRs->count() > 0) {
                 while (!$oRs->EOF) {
                     $aSelect[] = reset($oRs->fields);
-                    $oRs->moveNext();
+                    $oRs->fetchRow();
                 }
             }
         }
@@ -4075,7 +4075,7 @@ class Article extends \oxI18n implements ArticleInterface, \oxIUrl
         if ($oRs != false && $oRs->count() > 0) {
             while (!$oRs->EOF) {
                 $sIn .= ", " . $oDb->quote(current($oRs->fields)) . " ";
-                $oRs->moveNext();
+                $oRs->fetchRow();
             }
         }
 
@@ -4537,7 +4537,7 @@ class Article extends \oxI18n implements ArticleInterface, \oxIUrl
                 while (!$rs->EOF) {
                     $oArticle->setId($rs->fields[0]);
                     $oArticle->delete();
-                    $rs->moveNext();
+                    $rs->fetchRow();
                 }
             }
         }
