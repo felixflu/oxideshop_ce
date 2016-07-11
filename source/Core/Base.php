@@ -1417,9 +1417,9 @@ class Base extends \oxSuperCfg
      *                      
      * @return int The number of affected rows.                     
      */
-    protected function executeDatabaseQuery($query)
+    protected function executeDatabaseQuery($query, $fetchMode = Database::FETCH_MODE_NUM)
     {
-        $database = oxDb::getDb();
+        $database = Database::getDb();
 
         return $database->execute($query);
     }
@@ -1433,7 +1433,6 @@ class Base extends \oxSuperCfg
      */
     protected function _insert()
     {
-        $database = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
         $myConfig = $this->getConfig();
         $myUtils = oxRegistry::getUtils();
 
@@ -1454,7 +1453,7 @@ class Base extends \oxSuperCfg
 
         $insertSql .= $this->_getUpdateFields($this->getUseSkipSaveFields());
 
-        $result = (bool) $database->execute($insertSql);
+        $result = (bool) $this->executeDatabaseQuery($insertSql, oxDb::FETCH_MODE_ASSOC);
 
         return $result;
     }
@@ -1588,4 +1587,5 @@ class Base extends \oxSuperCfg
         //because active from setting is based on minutes
         return 60;
     }
+
 }
