@@ -1413,11 +1413,9 @@ class Base extends \oxSuperCfg
     /**
      * Execute a query on the database.
      *
-     * @param string $query The command to execute on the database.
-     *                      
      * @return int The number of affected rows.                     
      */
-    protected function executeDatabaseQuery($query, $fetchMode = Database::FETCH_MODE_NUM)
+    protected function executeDatabaseQuery($query)
     {
         $database = Database::getDb();
 
@@ -1453,7 +1451,7 @@ class Base extends \oxSuperCfg
 
         $insertSql .= $this->_getUpdateFields($this->getUseSkipSaveFields());
 
-        $result = (bool) $this->executeDatabaseQuery($insertSql, oxDb::FETCH_MODE_ASSOC);
+        $result = (bool) $this->executeDatabaseQuery($insertSql);
 
         return $result;
     }
