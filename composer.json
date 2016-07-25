@@ -16,7 +16,7 @@
         "doctrine/dbal": "v2.5.4"
     },
     "require-dev": {
-        "oxid-esales/testing-library": "dev-REBASED_integrate_doctrine-ESDEV-3462",
+        "oxid-esales/testing-library": "dev-integrate_doctrine-ESDEV-3462",
         "oxid-esales/coding-standards": "dev-master",
         "incenteev/composer-parameter-handler": "~2.0"
     },
