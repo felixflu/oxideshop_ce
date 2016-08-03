@@ -22,6 +22,7 @@
 
 namespace OxidEsales\Eshop\Application\Model;
 
+use Exception;
 use OxidEsales\Eshop\Application\Model\Contract\ArticleInterface;
 use oxDb;
 use OxidEsales\Eshop\Core\Database;
@@ -660,7 +661,7 @@ class Article extends \oxI18n implements ArticleInterface, \oxIUrl
     /**
      * Return unit quantity
      *
-     * @return sting
+     * @return string
      */
     public function getUnitQuantity()
     {
@@ -2167,7 +2168,7 @@ class Article extends \oxI18n implements ArticleInterface, \oxIUrl
             return false;
         }
 
-        $database = Database::getDb();
+        $database = oxDb::getDb();
         $database->startTransaction();
         try {
             // #2339 delete first variants before deleting parent product
@@ -2186,8 +2187,9 @@ class Article extends \oxI18n implements ArticleInterface, \oxIUrl
             $this->onChange(ACTION_DELETE, $sOXID, $this->oxarticles__oxparentid->value);
 
             $database->commitTransaction();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $database->rollbackTransaction();
+
             throw $exception;
         }
 
@@ -2824,7 +2826,6 @@ class Article extends \oxI18n implements ArticleInterface, \oxIUrl
                 $this->_sMoreDetailLink .= '&amp;cnid=' . $sActCat;
             }
             $this->_sMoreDetailLink .= '&amp;anid=' . $this->getId();
-            $this->_sMoreDetailLink = $this->_sMoreDetailLink;
         }
 
         return $this->_sMoreDetailLink;
@@ -4579,8 +4580,7 @@ class Article extends \oxI18n implements ArticleInterface, \oxIUrl
     protected function _deleteVariantRecords($sOXID)
     {
         if ($sOXID) {
-            // We force reading from master to prevent issues with slow replications or open transactions (see ESDEV-3804).
-            $database = Database::getDb();
+            $database = oxDb::getDb();
             //collect variants to remove recursively
             $query= 'select oxid from ' . $this->getViewName() . ' where oxparentid = ?';
             $rs = $database->select($query, array($sOXID));
@@ -4653,7 +4653,7 @@ class Article extends \oxI18n implements ArticleInterface, \oxIUrl
     protected function _onChangeUpdateStock($parentId)
     {
         if ($parentId) {
-            $database = Database::getDb();
+            $database = oxDb::getDb();
             $query = 'SELECT oxstock, oxvendorid, oxmanufacturerid FROM oxarticles WHERE oxid = ?';
             $rs = $database->select($query, array($parentId));
             $oldStock = $rs->fields[0];
@@ -4708,7 +4708,7 @@ class Article extends \oxI18n implements ArticleInterface, \oxIUrl
     protected function _onChangeUpdateVarCount($parentId)
     {
         if ($parentId) {
-            $database = Database::getDb();
+            $database = oxDb::getDb();
 
             $query = "SELECT COUNT(*) AS varcount FROM oxarticles WHERE oxparentid = ?";
             $varCount = (int) $database->getOne($query, array($parentId));
@@ -4726,8 +4726,7 @@ class Article extends \oxI18n implements ArticleInterface, \oxIUrl
     protected function _setVarMinMaxPrice($sParentId)
     {
         if ($sParentId) {
-          // We force reading from master to prevent issues with slow replications or open transactions (see ESDEV-3804).
-          $database = Database::getDb(Database::FETCH_MODE_ASSOC);
+          $database = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
           $sQ = '
                 SELECT
                     MIN( IF( `oxarticles`.`oxprice` > 0, `oxarticles`.`oxprice`, `p`.`oxprice` ) ) AS `varminprice`,

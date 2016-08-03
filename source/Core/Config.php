@@ -22,6 +22,7 @@
 
 namespace OxidEsales\Eshop\Core;
 
+use oxDb;
 use oxException;
 use OxidEsales\Eshop\Application\Controller\OxidStartController;
 use OxidEsales\Eshop\Application\Model\Shop;
@@ -552,7 +553,7 @@ class Config extends SuperConfig
      */
     protected function _loadVarsFromDb($shopID, $onlyVars = null, $module = '')
     {
-        $db = Database::getDb();
+        $db = oxDb::getDb();
 
         $moduleSql = $module ? " oxmodule LIKE " . $db->quote($module . "%") : " oxmodule='' ";
         $onlyVarsSql = $this->_getConfigParamsSelectSnippet($onlyVars);
@@ -1830,7 +1831,7 @@ class Config extends SuperConfig
             $this->setConfigParam($varName, $varVal);
         }
 
-        $db = Database::getDb();
+        $db = oxDb::getDb();
         $shopIdQuoted = $db->quote($shopId);
         $moduleQuoted = $db->quote($module);
         $varNameQuoted = $db->quote($varName);
@@ -1869,7 +1870,7 @@ class Config extends SuperConfig
             }
         }
 
-        $db = Database::getDb(Database::FETCH_MODE_ASSOC);
+        $db = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
 
         $query = "select oxvartype, " . $this->getDecodeValueQuery() . " as oxvarvalue from oxconfig where oxshopid = '{$shopId}' and oxmodule = '{$module}' and oxvarname = " . $db->quote($varName);
         $rs = $db->select($query);
@@ -1928,7 +1929,7 @@ class Config extends SuperConfig
         $productive = $this->getConfigParam('blProductive');
         if (!isset($productive)) {
             $query = 'select oxproductive from oxshops where oxid = "' . $this->getShopId() . '"';
-            $productive = ( bool ) Database::getDb()->getOne($query);
+            $productive = ( bool ) oxDb::getDb()->getOne($query);
             $this->setConfigParam('blProductive', $productive);
         }
 
@@ -2148,7 +2149,7 @@ class Config extends SuperConfig
      */
     public function getShopIds()
     {
-        return Database::getDb()->getCol("SELECT `oxid` FROM `oxshops`");
+        return oxDb::getDb()->getCol("SELECT `oxid` FROM `oxshops`");
     }
 
     /**

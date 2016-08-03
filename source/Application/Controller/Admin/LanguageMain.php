@@ -405,15 +405,14 @@ class LanguageMain extends \oxAdminDetails
      */
     protected function _addNewMultilangFieldsToDb()
     {
-        //creating new multilanguage fields with new id over whole DB
-        oxDb::getDb()->startTransaction();
-
+        //creating new multilingual fields with new id over whole DB
         $oDbMeta = oxNew("oxDbMetaDataHandler");
 
+        oxDb::getDb()->startTransaction();
         try {
             $oDbMeta->addNewLangToDb();
+            oxDb::getDb()->commitTransaction();
         } catch (Exception $oEx) {
-            // if exception, rollBack everything
             oxDb::getDb()->rollbackTransaction();
 
             //show warning
@@ -424,8 +423,6 @@ class LanguageMain extends \oxAdminDetails
 
             return;
         }
-
-        oxDb::getDb()->commitTransaction();
     }
 
     /**

@@ -22,10 +22,10 @@
 
 namespace OxidEsales\Eshop\Core;
 
+use Exception;
 use oxRegistry;
 use oxDb;
 use OxidEsales\Eshop\Core\Exception\StandardException;
-use OxidEsales\Eshop\Core\Exception\DatabaseException;
 
 /**
  * Seo encoder base
@@ -1016,6 +1016,8 @@ class SeoEncoder extends \oxSuperCfg
      * @param int   $iShopId    active shop id
      * @param int   $iLang      active language
      *
+     * @throws Exception
+     *
      * @return null
      */
     public function encodeStaticUrls($aStaticUrl, $iShopId, $iLang)
@@ -1053,18 +1055,18 @@ class SeoEncoder extends \oxSuperCfg
             if ($sOldObjectId) {
                 // Transaction picks master automatically (see ESDEV-3804 and ESDEV-3822).
                 $db->startTransaction();
-
-                try{
+                try {
                     // move changed records to history
                     if (!$db->getOne("select (" . $db->quote($sSeoUrl) . " like oxseourl) & (" . $db->quote($sStdUrl) . " like oxstdurl) from oxseo where oxobjectid = " . $db->quote($sOldObjectId) . " and oxshopid = '{$iShopId}' and oxlang = '{$iLang}' ")) {
                         $this->_copyToHistory($sOldObjectId, $iShopId, $iLang, 'static', $sObjectId);
                     }
-                } catch (DatabaseException $exception) {
-                    Database::getDb()->rollbackTransaction();
+
+                    $db->commitTransaction();
+                } catch (Exception $exception) {
+                    $db->rollbackTransaction();
+
                     throw $exception;
                 }
-
-                $db->commitTransaction();
             }
 
             if (!$sSeoUrl || !$sStdUrl) {
